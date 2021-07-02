@@ -81,29 +81,6 @@ def letter_accuracy(word,word2):
     acc=(acc/len(word))*100
     return acc
 
-def accuracy(word):
-    file=open('Github\Python Autocorrect\words_alpha.txt')
-    all_words=file.read().split()
-    
-    if word not in all_words:
-        relevant_words=[]
-        for x in all_words:
-            if len(x)==len(word):
-                relevant_words.append(x)    #all same length words appended
-        c=0
-        for rel_word in relevant_words:
-            if number_of_mismatches(word,rel_word)>2 or (not combo_check(word,rel_word)) or (not check_adj_keys(word,rel_word)):
-                relevant_words.remove(rel_word)
-                c+=1
-                #print("removed",rel_word)
-        print("Removed",c,"words")
-        #relevant_words.sort(key=lambda tup: tup[1], reverse=True)  # sorts in place by accuracy, descending order
-        print(len(relevant_words))
-        print('aargh' in relevant_words)
-    else:
-        print("Present in dictionary")
-    file.close()
-
 def modified_acc(word):
     file=open('Github\Python Autocorrect\words_alpha.txt')
     all_words=file.read().split()
@@ -135,12 +112,11 @@ def modified_acc(word):
         #print(word,"present in dictionary")
     file.close()
 
-
-#print(modified_acc('hlelo'), modified_acc('jelol'), modified_acc('hdllo'))
-
-#print(number_of_mismatches('hlelo','aargh'), not combo_check('hlelo','aargh'), not check_adj_keys('hlelo','aargh') )
-
 '''
+print(modified_acc('hlelo'), modified_acc('jelol'), modified_acc('hdllo'))
+
+print(number_of_mismatches('hlelo','aargh'), not combo_check('hlelo','aargh'), not check_adj_keys('hlelo','aargh') )
+
 if combo_check('hello','henlo'):
     print("Combo True")
 else:
