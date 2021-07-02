@@ -1,5 +1,8 @@
 import itertools as it
 
+#input_word = user input word
+#proper_word = word from dictionary
+
 def remove_sames(input_word, proper_word):          #removes same letters so we can find ony points of dissimalrity
     proper_letters=[x for x in proper_word]
     input_letters=[x for x in input_word]
@@ -18,14 +21,14 @@ def remove_sames(input_word, proper_word):          #removes same letters so we 
         c+=1
     return proper_letters,input_letters
 
-def number_of_mismatches(input_word, proper_word):
+def number_of_mismatches(input_word, proper_word):  #total number of letters that dont match in 2 words
     c=0
     for i in range(len(input_word)):
         if input_word[i]!=proper_word[i]:
             c+=1
     return c
 
-def check_adj_keys(input_word, proper_word):
+def check_adj_keys(input_word, proper_word):        #adjacent key dictionary + checking if mistyped with adjacent dictionary
     adjacent_keys={
         'q':'was',
         'w':'qase',
@@ -62,7 +65,7 @@ def check_adj_keys(input_word, proper_word):
     return False
     #print("Nopes")
 
-def combo_check(input_word,proper_word):
+def permut_check(input_word,proper_word):            #check diff permutations of letters of wordd
     proper_letters,input_letters=remove_sames(input_word, proper_word)
     
     if tuple(input_letters) in it.permutations(proper_letters,len(proper_letters)):
@@ -72,7 +75,7 @@ def combo_check(input_word,proper_word):
         return False
         #print("Nopes")
 
-def letter_accuracy(word,word2):
+def letter_accuracy(word,word2):                     #calculates accuracy on letter by letter basis, not used yet
     acc=0.0
     for letter in word:
         #print(letter, word2[word.index(letter)])
@@ -81,14 +84,14 @@ def letter_accuracy(word,word2):
     acc=(acc/len(word))*100
     return acc
 
-def modified_acc(word):
-    file=open('Github\Python Autocorrect\words_alpha.txt')
+def actual_word(word):                               #cumulative function that compiles all above functions
+    file=open('words_alpha.txt')
     all_words=file.read().split()
     
     if word not in all_words:
         relevant_words=[]
         for x in all_words:
-            if len(x)==len(word) and number_of_mismatches(word,x)<3 and (combo_check(word,x) or check_adj_keys(word,x)):
+            if len(x)==len(word) and number_of_mismatches(word,x)<3 and (permut_check(word,x) or check_adj_keys(word,x)):
                 relevant_words.append(x)
         
         #print(len(relevant_words))
@@ -105,19 +108,22 @@ def modified_acc(word):
             return letter_accuracies[0][0]
 
         #for x in relevant_words:
-        #    print("{}; {}: Adj Check={}, Combo Check={}".format(word,x,check_adj_keys(word,x),combo_check(word,x)) )
+        #    print("{}; {}: Adj Check={}, Combo Check={}".format(word,x,check_adj_keys(word,x),permut_check(word,x)) )
 
     else:
         return word
         #print(word,"present in dictionary")
     file.close()
 
+
+
 '''
-print(modified_acc('hlelo'), modified_acc('jelol'), modified_acc('hdllo'))
+TEST CASES:
 
-print(number_of_mismatches('hlelo','aargh'), not combo_check('hlelo','aargh'), not check_adj_keys('hlelo','aargh') )
+print(actual_word('hlelo'), actual_word('jelol'), actual_word('hdllo'))
+print(number_of_mismatches('hlelo','aargh'), not permut_check('hlelo','aargh'), not check_adj_keys('hlelo','aargh') )
 
-if combo_check('hello','henlo'):
+if permut_check('hello','henlo'):
     print("Combo True")
 else:
     print("C False")
@@ -133,7 +139,7 @@ print(letter_accuracy('hello', 'marcy'))
 check_adj_keys('gello','hello')
 print(number_of_mismatches('gello','hello'))
 
-combo_check('ehllo','hello')
+permut_check('ehllo','hello')
 
 a,b=remove_sames('hello','eholl')
 print(a,b)
